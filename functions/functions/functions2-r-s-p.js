@@ -4,9 +4,27 @@ let score = JSON.parse(localStorage.getItem('score')) || {
   ties: 0
 };
 
+let isAutoPlaying = false;
+let intervalId;
+
 updateScoreElement();
 
-
+document.querySelector('.js-auto-play-button')
+  .addEventListener('click', () => {
+    if (isAutoPlaying) {
+      clearInterval(intervalId); // arrete l intervalle 
+      isAutoPlaying = false;
+      document.querySelector('.js-auto-play-button').innerHTML = 'Auto Play';
+    } else {
+      intervalId = setInterval(() => {
+        const playerMove = pickComputerMove(); 
+        playGame(playerMove);
+      }, 1000); // chaque seconde; 1000ms = 1s
+      
+      isAutoPlaying = true;
+      document.querySelector('.js-auto-play-button').innerHTML = 'Stop Playing';
+    }
+  });
 
 document.querySelector('.js-rock-button')
   .addEventListener('click', () => {
